@@ -27,12 +27,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
+          targets: ${{ matrix.target }}
+
+      - name: Setup Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Build for ${{ matrix.arch }}
-        run: cargo build --release --target ${{ matrix.target }}
+        run: cargo build --verbose --locked --release --target ${{ matrix.target }}
 
   package:
     needs: build
